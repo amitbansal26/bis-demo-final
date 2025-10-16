@@ -1,0 +1,7 @@
+image: your-registry/bis-frontend:latest
+service:
+  port: 80
+env:
+  VITE_KC_URL: "http://keycloak:8080"
+  VITE_KC_REALM: "bis-demo"
+  VITE_KC_CLIENT: "bis-frontend"

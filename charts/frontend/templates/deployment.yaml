@@ -1,0 +1,24 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bis-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: bis-frontend }
+  template:
+    metadata:
+      labels: { app: bis-frontend }
+    spec:
+      containers:
+        - name: bis-frontend
+          image: { { .Values.image } }
+          ports: [{{ containerPort: 80 }}]
+          env:
+                - name: VITE_KC_URL
+                  value: "{{ .Values.env.VITE_KC_URL }}"
+                - name: VITE_KC_REALM
+                  value: "{{ .Values.env.VITE_KC_REALM }}"
+                - name: VITE_KC_CLIENT
+                  value: "{{ .Values.env.VITE_KC_CLIENT }}"

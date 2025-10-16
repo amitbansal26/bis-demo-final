@@ -1,0 +1,30 @@
+
+databaseChangeLog:
+  - changeSet:
+      id: 002-seed
+      author: demo
+      changes:
+        - insert:
+            tableName: app_user
+            columns:
+              - column: {name: mobile, value: '9999999999'}
+              - column: {name: email, value: 'seed@applicant.example'}
+              - column: {name: name, value: 'Seed Applicant'}
+              - column: {name: password_hash, value: 'na'}
+              - column: {name: role, value: 'APPLICANT'}
+        - insert:
+            tableName: certification_application
+            columns:
+              - column: {name: scheme, value: 'Scheme-I'}
+              - column: {name: status, value: 'SUBMITTED'}
+              - column: {name: is_number, value: 'IS 1234'}
+              - column: {name: product, value: 'Sample Product'}
+              - column: {name: applicant_id, valueNumeric: 1}
+        - insert:
+            tableName: payment
+            columns:
+              - column: {name: order_id, value: 'seed-order-1'}
+              - column: {name: app_ref, value: 'APP-001'}
+              - column: {name: amount_in_paise, valueNumeric: 50000}
+              - column: {name: mode, value: 'UPI'}
+              - column: {name: status, value: 'SUCCESS'}

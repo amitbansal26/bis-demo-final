@@ -1,0 +1,86 @@
+
+databaseChangeLog:
+  - changeSet:
+      id: 001-core
+      author: demo
+      changes:
+        - createTable:
+            tableName: app_user
+            columns:
+              - column: { name: id, type: BIGSERIAL, constraints: {primaryKey: true} }
+              - column: { name: mobile, type: VARCHAR(32), constraints: {unique: true} }
+              - column: { name: email, type: VARCHAR(128), constraints: {unique: true} }
+              - column: { name: name, type: VARCHAR(128) }
+              - column: { name: password_hash, type: VARCHAR(255) }
+              - column: { name: role, type: VARCHAR(32) }
+        - createTable:
+            tableName: certification_application
+            columns:
+              - column: { name: id, type: BIGSERIAL, constraints: {primaryKey: true} }
+              - column: { name: scheme, type: VARCHAR(32) }
+              - column: { name: status, type: VARCHAR(32) }
+              - column: { name: is_number, type: VARCHAR(32) }
+              - column: { name: product, type: VARCHAR(255) }
+              - column: { name: applicant_id, type: BIGINT }
+              - column: { name: created_at, type: TIMESTAMP }
+              - column: { name: updated_at, type: TIMESTAMP }
+        - addForeignKeyConstraint:
+            baseTableName: certification_application
+            baseColumnNames: applicant_id
+            constraintName: fk_applicant
+            referencedTableName: app_user
+            referencedColumnNames: id
+        - createTable:
+            tableName: document_ref
+            columns:
+              - column: { name: id, type: BIGSERIAL, constraints: {primaryKey: true} }
+              - column: { name: name, type: VARCHAR(255) }
+              - column: { name: type, type: VARCHAR(64) }
+              - column: { name: url, type: VARCHAR(1024) }
+              - column: { name: application_id, type: BIGINT }
+        - addForeignKeyConstraint:
+            baseTableName: document_ref
+            baseColumnNames: application_id
+            constraintName: fk_doc_app
+            referencedTableName: certification_application
+            referencedColumnNames: id
+        - createTable:
+            tableName: activity_log
+            columns:
+              - column: { name: id, type: BIGSERIAL, constraints: {primaryKey: true} }
+              - column: { name: action, type: VARCHAR(64) }
+              - column: { name: at, type: TIMESTAMP }
+              - column: { name: details, type: VARCHAR(1024) }
+              - column: { name: application_id, type: BIGINT }
+        - addForeignKeyConstraint:
+            baseTableName: activity_log
+            baseColumnNames: application_id
+            constraintName: fk_log_app
+            referencedTableName: certification_application
+            referencedColumnNames: id
+        - createTable:
+            tableName: payment
+            columns:
+              - column: { name: id, type: BIGSERIAL, constraints: {primaryKey: true} }
+              - column: { name: order_id, type: VARCHAR(64) }
+              - column: { name: app_ref, type: VARCHAR(64) }
+              - column: { name: amount_in_paise, type: BIGINT }
+              - column: { name: mode, type: VARCHAR(32) }
+              - column: { name: status, type: VARCHAR(32) }
+              - column: { name: created_at, type: TIMESTAMP }
+              - column: { name: updated_at, type: TIMESTAMP }
+        - createTable:
+            tableName: inspection_schedule
+            columns:
+              - column: { name: id, type: BIGSERIAL, constraints: {primaryKey: true} }
+              - column: { name: application_id, type: BIGINT }
+              - column: { name: inspector, type: VARCHAR(128) }
+              - column: { name: region, type: VARCHAR(64) }
+              - column: { name: scheduled_at, type: TIMESTAMP }
+              - column: { name: status, type: VARCHAR(32) }
+        - addForeignKeyConstraint:
+            baseTableName: inspection_schedule
+            baseColumnNames: application_id
+            constraintName: fk_insp_app
+            referencedTableName: certification_application
+            referencedColumnNames: id

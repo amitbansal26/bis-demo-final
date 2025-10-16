@@ -1,0 +1,61 @@
+
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:bisdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+
+app:
+  otp:
+    mock: true
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+# OAuth2 / Keycloak (JWT)
+security:
+  oauth2:
+    resourceserver:
+      jwt:
+        issuer-uri: http://localhost:8081/realms/bis-demo
+        jwk-set-uri: http://localhost:8081/realms/bis-demo/protocol/openid-connect/certs
+
+cors:
+  allowed-origins: "http://localhost:5173"
+  allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+  allowed-headers: "*"
+
+storage:
+  s3:
+    endpoint: http://localhost:9000
+    access-key: minioadmin
+    secret-key: minioadmin
+    bucket: bis-uploads
+    region: us-east-1
+    presign-expiry-seconds: 900
+
+clamav:
+  host: localhost
+  port: 3310
+  enabled: true
+  allowed-mime: "application/pdf,image/png,image/jpeg"

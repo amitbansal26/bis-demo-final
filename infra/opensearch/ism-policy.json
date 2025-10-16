@@ -1,0 +1,41 @@
+{
+  "policy": {
+    "description": "90d retention, snapshot on day 1, delete at day 90",
+    "default_state": "hot",
+    "states": [
+      {
+        "name": "hot",
+        "actions": [
+          {
+            "rollover": {
+              "min_primary_shard_size": "5gb",
+              "min_index_age": "1d"
+            }
+          },
+          {
+            "snapshot": {
+              "repository": "minio-repo",
+              "snapshot": "snap-{index}-{now/d}"
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "delete",
+            "conditions": {
+              "min_index_age": "90d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "delete",
+        "actions": [
+          {
+            "delete": {}
+          }
+        ]
+      }
+    ]
+  }
+}

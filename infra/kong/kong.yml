@@ -1,0 +1,39 @@
+
+_format_version: "3.0"
+_services:
+- name: payments
+  url: http://payments-svc:8080
+  routes:
+  - name: payments
+    paths: ["/api/payments"]
+- name: documents
+  url: http://documents-svc:8080
+  routes:
+  - name: documents
+    paths: ["/api/documents"]
+- name: scheduling
+  url: http://scheduling-svc:8080
+  routes:
+  - name: scheduling
+    paths: ["/api/scheduling"]
+- name: notifications
+  url: http://notifications-svc:8080
+  routes:
+  - name: notifications
+    paths: ["/api/notify"]
+- name: workflow
+  url: http://workflow-svc:8080
+  routes:
+  - name: workflow
+    paths: ["/api/workflow"]
+
+plugins:
+- name: oidc
+  config:
+    client_id: bis-frontend
+    client_secret: ""
+    bearer_only: "yes"
+    discovery: "http://keycloak:8081/realms/bis-demo/.well-known/openid-configuration"
+    realm: "bis-demo"
+    session_secret: "changemechangeme"
+    filters: "(/v3|/swagger|/actuator|/health)"

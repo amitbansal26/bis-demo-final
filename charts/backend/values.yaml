@@ -1,0 +1,5 @@
+image: your-registry/bis-backend:latest
+service:
+  port: 8080
+env:
+  SPRING_PROFILES_ACTIVE: "postgres"

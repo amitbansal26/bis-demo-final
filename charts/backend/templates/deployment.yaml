@@ -1,0 +1,20 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bis-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: bis-backend }
+  template:
+    metadata:
+      labels: { app: bis-backend }
+    spec:
+      containers:
+        - name: bis-backend
+          image: { { .Values.image } }
+          ports: [{{ containerPort: 8080 }}]
+          env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: "{{ .Values.env.SPRING_PROFILES_ACTIVE }}"

@@ -1,0 +1,79 @@
+{
+  "realm": "bis-demo",
+  "enabled": true,
+  "roles": {
+    "realm": [
+      {
+        "name": "ADMIN"
+      },
+      {
+        "name": "OFFICER"
+      },
+      {
+        "name": "APPLICANT"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "email": "admin@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ADMIN"
+      ]
+    },
+    {
+      "username": "officer",
+      "enabled": true,
+      "email": "officer@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "officer",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "OFFICER"
+      ]
+    },
+    {
+      "username": "applicant",
+      "enabled": true,
+      "email": "applicant@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "applicant",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "APPLICANT"
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "bis-frontend",
+      "publicClient": true,
+      "redirectUris": [
+        "http://localhost:5173/*"
+      ],
+      "webOrigins": [
+        "http://localhost:5173"
+      ],
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "protocol": "openid-connect"
+    }
+  ]
+}

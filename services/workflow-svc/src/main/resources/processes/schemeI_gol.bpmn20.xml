@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" targetNamespace="Examples">
+  <process id="schemeI_gol" name="Scheme-I GoL" isExecutable="true">
+    <startEvent id="start"/>
+    <sequenceFlow id="f1" sourceRef="start" targetRef="scrutiny"/>
+    <userTask id="scrutiny" name="Under Scrutiny"/>
+    <sequenceFlow id="f2" sourceRef="scrutiny" targetRef="pi"/>
+    <userTask id="pi" name="Product Inspection"/>
+    <sequenceFlow id="f3" sourceRef="pi" targetRef="license"/>
+    <userTask id="license" name="License Grant"/>
+    <endEvent id="end"/>
+    <sequenceFlow id="f4" sourceRef="license" targetRef="end"/>
+  </process>
+</definitions>

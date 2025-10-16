@@ -1,0 +1,123 @@
+version: '3.9'
+services:
+  zookeeper:
+    image: bitnami/zookeeper:3.9
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports: ["2181:2181"]
+
+  kafka:
+    image: bitnami/kafka:3.7
+    environment:
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    ports: ["9092:9092"]
+    depends_on: [zookeeper]
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+    ports: ["8088:8080"]
+    depends_on: [kafka]
+
+  payments-svc:
+    build: ./services/payments-svc
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+    depends_on: [postgres, kafka]
+    ports: ["8081:8080"]
+
+  documents-svc:
+    build: ./services/documents-svc
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+    depends_on: [postgres]
+    ports: ["8082:8080"]
+
+  scheduling-svc:
+    build: ./services/scheduling-svc
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+    depends_on: [postgres]
+    ports: ["8083:8080"]
+
+  notifications-svc:
+    build: ./services/notifications-svc
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+    depends_on: [kafka, postgres]
+    ports: ["8084:8080"]
+
+  workflow-svc:
+    build: ./services/workflow-svc
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+    depends_on: [postgres]
+    ports: ["8085:8080"]
+
+  kong:
+    build: ./infra/kong
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+    volumes:
+      - ./infra/kong/kong.yml:/kong/kong.yml:ro
+    ports: ["8000:8000","8001:8001"]
+    depends_on: [payments-svc, documents-svc, scheduling-svc, notifications-svc, workflow-svc]
+
+  opensearch:
+    image: opensearchproject/opensearch:2.13.0
+    environment:
+      - discovery.type=single-node
+      - plugins.security.disabled=true
+      - cluster.name=opensearch-cluster
+      - node.name=node-1
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    ports: ["9200:9200","9600:9600"]
+
+  dashboards:
+    image: opensearchproject/opensearch-dashboards:2.13.0
+    environment:
+      - OPENSEARCH_HOSTS=http://opensearch:9200
+    ports: ["5601:5601"]
+    depends_on: [opensearch]
+
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    volumes:
+      - ./infra/observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports: ["9090:9090"]
+
+  grafana:
+    image: grafana/grafana:10.4.6
+    ports: ["3000:3000"]
+    depends_on: [prometheus]
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: bisdb
+      POSTGRES_USER: bis
+      POSTGRES_PASSWORD: bis
+    ports: ["5432:5432"]
+    volumes: [ "pg-data:/var/lib/postgresql/data" ]
+
+volumes:
+  pg-data:
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports: ["8025:8025"]

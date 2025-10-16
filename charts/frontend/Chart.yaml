@@ -1,0 +1,4 @@
+name: bis-frontend
+version: 0.1.0
+apiVersion: v2
+description: bis-frontend chart
