@@ -12,6 +12,8 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yaml
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/bisdb}
+    user: ${SPRING_LIQUIBASE_USER:${DB_USER:bis}}
+    password: ${SPRING_LIQUIBASE_PASSWORD:${DB_PASSWORD:bis}}
 
 security:
   oauth2:
