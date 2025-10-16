@@ -1,0 +1,6 @@
+# Frontend build artifacts
+frontend/node_modules/
+frontend/dist/
+
+# Maven build output
+backend/target/
