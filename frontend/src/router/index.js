@@ -15,20 +15,19 @@ import PISchedule from '../views/PISchedule.vue'
 import ApplySchemeI from '../views/ApplySchemeI.vue'
 import ApplySchemeIV from '../views/ApplySchemeIV.vue'
 import ApplySchemeX from '../views/ApplySchemeX.vue'
-
-
+import { useKeycloak, hasRole } from '../plugins/auth'
 
 const routes = [
-  { path: '/tasks', component: Tasks, meta: { requiresAuth: true } } ,
-  { path: '/queues', component: OfficerQueues, meta: { requiresAuth: true, roles: ['OFFICER','ADMIN'] } }
-  { path: '/pi', component: PISchedule, meta: { requiresAuth: true, roles: ['OFFICER','ADMIN'] } }
+  { path: '/tasks', component: Tasks, meta: { requiresAuth: true } },
+  { path: '/queues', component: OfficerQueues, meta: { requiresAuth: true, roles: ['OFFICER', 'ADMIN'] } },
+  { path: '/pi', component: PISchedule, meta: { requiresAuth: true, roles: ['OFFICER', 'ADMIN'] } },
   { path: '/apply-scheme-i', component: ApplySchemeI },
   { path: '/apply-scheme-iv', component: ApplySchemeIV },
   { path: '/apply-scheme-x', component: ApplySchemeX },
   { path: '/upload', component: Upload },
   { path: '/payments', component: Payments },
-  { path: '/officer', component: Officer, meta: { requiresAuth: true, roles: ['OFFICER','ADMIN'] } },
-  { path: '/export', component: ExportCsv, meta: { requiresAuth: true, roles: ['ADMIN'] } }
+  { path: '/officer', component: Officer, meta: { requiresAuth: true, roles: ['OFFICER', 'ADMIN'] } },
+  { path: '/export', component: ExportCsv, meta: { requiresAuth: true, roles: ['ADMIN'] } },
   { path: '/map', component: MapView },
   { path: '/chat', component: Chat },
   { path: '/', component: Home },
@@ -37,13 +36,10 @@ const routes = [
   { path: '/track', component: Track }
 ]
 
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes
 })
-
-import { useKeycloak } from '../plugins/auth'
-import { hasRole } from '../plugins/auth'
 
 router.beforeEach((to, from, next) => {
   const kc = useKeycloak()
@@ -59,3 +55,5 @@ router.beforeEach((to, from, next) => {
   }
   next()
 })
+
+export default router
