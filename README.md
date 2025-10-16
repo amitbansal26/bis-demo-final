@@ -22,6 +22,20 @@ npm run dev
 ```
 Open http://localhost:5173
 
+### QA sandbox environment
+
+Use the dedicated Docker Compose file to spin up an isolated "QA" stack that
+won't clash with the default local ports:
+
+```bash
+docker compose -f docker-compose.qa.yml up -d --build
+# Backend:   http://localhost:8180
+# Frontend:  http://localhost:6173
+# Keycloak:  http://localhost:8181
+# MinIO UI:  http://localhost:9101
+```
+Tear it down with `docker compose -f docker-compose.qa.yml down` when done.
+
 ## What this demo covers
 
 - **User Registration with OTP mock**, duplicate checks for mobile/email, welcome message stub.  
