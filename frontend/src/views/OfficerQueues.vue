@@ -10,7 +10,9 @@
         <option>Scheme-X</option>
       </select>
     </label>
-    <button @click="load">Load</button>
+    <button @click="load" :disabled="loading">{{ loading ? 'Loading…' : 'Load' }}</button>
+    <p v-if="loading" role="status">Fetching queue…</p>
+    <div v-if="error" role="alert" style="color:#b30000">{{ error }}</div>
     <table border="1" cellpadding="6" style="margin-top:1rem">
       <thead><tr><th>ID</th><th>Scheme</th><th>Product</th><th>Status</th></tr></thead>
       <tbody>
@@ -24,8 +26,20 @@ import { ref } from 'vue'
 import axios from 'axios'
 const scheme = ref('')
 const apps = ref([])
+const loading = ref(false)
+const error = ref('')
 async function load(){
-  const r = await axios.get('http://localhost:8080/api/officer/queue', { params: { scheme: scheme.value || null }})
-  apps.value = r.data
+  loading.value = true
+  error.value = ''
+  try {
+    const r = await axios.get('http://localhost:8080/api/officer/queue', { params: { scheme: scheme.value || null }})
+    apps.value = r.data
+  } catch (err) {
+    apps.value = []
+    const message = err?.response?.data?.message || err?.message || 'Unable to load queues.'
+    error.value = message
+  } finally {
+    loading.value = false
+  }
 }
 </script>
