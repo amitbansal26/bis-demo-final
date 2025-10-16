@@ -16,6 +16,10 @@ spring:
   h2:
     console:
       enabled: true
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 logging:
   level:
@@ -25,12 +29,6 @@ logging:
 app:
   otp:
     mock: true
-
-spring:
-  servlet:
-    multipart:
-      max-file-size: 20MB
-      max-request-size: 20MB
 
 # OAuth2 / Keycloak (JWT)
 security:
