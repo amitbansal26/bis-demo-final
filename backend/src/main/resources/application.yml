@@ -20,6 +20,12 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/realms/bis-demo
+          jwk-set-uri: http://localhost:8081/realms/bis-demo/protocol/openid-connect/certs
 
 logging:
   level:
@@ -31,12 +37,6 @@ app:
     mock: true
 
 # OAuth2 / Keycloak (JWT)
-security:
-  oauth2:
-    resourceserver:
-      jwt:
-        issuer-uri: http://localhost:8081/realms/bis-demo
-        jwk-set-uri: http://localhost:8081/realms/bis-demo/protocol/openid-connect/certs
 
 cors:
   allowed-origins: "http://localhost:5173"
