@@ -19,10 +19,13 @@
           <router-link to="/tasks">कार्य</router-link>
     </nav>
     </header>
-    <router-view />
+    <ErrorBoundary>
+      <router-view />
+    </ErrorBoundary>
   </div>
 </template>
 <script setup>
 import { useI18n } from 'vue-i18n'
+import ErrorBoundary from './components/ErrorBoundary.vue'
 const { t } = useI18n()
 </script>
