@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <header style="display:flex;gap:1rem;align-items:center;justify-content:space-between;padding:1rem;border-bottom:1px solid #ddd">
+  <div class="app-shell">
+    <header>
       <h1>{{ t('title') }}</h1>
-      <div>
+      <div class="app-shell">
         <select v-model="$i18n.locale">
           <option value="hi">हिन्दी</option>
           <option value="en">English</option>
         </select>
       </div>
-      <nav style="padding:0.5rem 1rem; border-bottom:1px solid #eee; display:flex; gap:0.75rem; flex-wrap:wrap">
+      <nav>
       <router-link to="/">{{ t('home') }}</router-link>
       <router-link to="/register">{{ t('register') }}</router-link>
       <router-link to="/apply">{{ t('apply') }}</router-link>
@@ -27,6 +27,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import { hasRole } from './plugins/auth'
+import ThemeToggle from './components/ThemeToggle.vue'
 import ErrorBoundary from './components/ErrorBoundary.vue'
 
 const { t } = useI18n()

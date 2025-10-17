@@ -11,3 +11,13 @@
 3. Optionally start the dev server with `npm run dev` and exercise each screen to observe loading spinners and failure states (use browser dev tools to simulate network errors).
 
 These steps confirm both the new defensive UI states and the global error boundary behave as expected.
+
+## Theming
+
+This frontend now supports light/dark theming using CSS variables.
+
+- Variables are defined in `src/styles/theme.css`.
+- The current theme is applied on `<html data-theme="...">` and persisted in `localStorage` under `bis.theme`.
+- A ready-to-use `<ThemeToggle />` button is available and wired into the header in `App.vue`.
+- To customize colors, edit the `:root` (light) and `[data-theme="dark"]` blocks.
+
