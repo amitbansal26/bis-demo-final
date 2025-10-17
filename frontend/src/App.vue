@@ -26,6 +26,8 @@
 </template>
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { hasRole } from './plugins/auth'
 import ErrorBoundary from './components/ErrorBoundary.vue'
+
 const { t } = useI18n()
 </script>
